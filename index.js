@@ -19,6 +19,7 @@ async function run() {
 
         const productsCollection = client.db("tool-time").collection('products')
         const orderCollection = client.db("tool-time").collection('orders')
+        const reviewCollection = client.db("tool-time").collection('reviews')
 
         // products collection
 
@@ -41,7 +42,26 @@ async function run() {
             const order = req.body;
             const result = await orderCollection.insertOne(order)
             res.send(result)
+        });
+
+        app.get('/orders', async (req, res) => {
+            const order = await orderCollection.find().toArray()
+            res.send(order)
         })
+
+        // reviews collection 
+
+        app.get('/reviews', async (req, res) => {
+            const review = await reviewCollection.find().toArray()
+            res.send(review)
+        })
+
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review)
+            res.send(result)
+        })
+
 
 
     } finally {
