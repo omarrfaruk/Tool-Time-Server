@@ -49,11 +49,27 @@ async function run() {
         })
 
 
+        app.delete('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await productsCollection.deleteOne(query)
+            res.send(result)
+        })
+
+
         app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
             const products = await productsCollection.findOne(query)
             res.send(products)
+        })
+
+
+        app.post('/product', async (req, res) => {
+
+            const products = req.body;
+            const result = await productsCollection.insertOne(products)
+            res.send(result)
         })
 
         // order collection
@@ -83,6 +99,12 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const result = await orderCollection.deleteOne(query)
             res.send(result)
+        })
+
+
+        app.get('/orders/admin', async (req, res) => {
+            const allOrders = await orderCollection.find().toArray()
+            res.send(allOrders)
         })
 
         // reviews collection 
@@ -115,11 +137,34 @@ async function run() {
         })
 
 
+
+        app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            // console.log(user);
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: user
+            };
+            const result = await usersCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
+
+
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
             const user = await usersCollection.findOne({ email: email })
             const isAdmin = user.role === 'admin';
             res.send({ admin: isAdmin })
+        })
+
+
+
+        app.get('/user', async (req, res) => {
+            const email = req.headers.email;
+            const user = await usersCollection.findOne({ email: email })
+            res.send(user)
         })
 
         app.put('/users/admin/:email', verifyJWT, async (req, res) => {
@@ -139,6 +184,8 @@ async function run() {
             }
 
         })
+
+
 
         app.get('/users', verifyJWT, async (req, res) => {
             const user = await usersCollection.find().toArray()
