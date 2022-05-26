@@ -8,13 +8,12 @@ const { send } = require('process');
 require('dotenv').config()
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
-app.use(
-    cors({
-        origin: true,
-        optionsSuccessStatus: 200,
-        credentials: true,
-    })
-);
+const corsConfig = {
+    origin: true,
+    credentials: true,
+};
+app.use(cors(corsConfig));
+app.options("*", cors(corsConfig));
 app.use(express.json())
 
 
@@ -74,7 +73,8 @@ async function run() {
 
         app.delete('/product/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) }
+            console.log(id);
+            const query = {_id:ObjectId(id) }
             const result = await productsCollection.deleteOne(query)
             res.send(result)
         })
@@ -82,7 +82,8 @@ async function run() {
 
         app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) }
+            // console.log(id);
+            const query = {_id: ObjectId(id) }
             const products = await productsCollection.findOne(query)
             res.send(products)
         })
