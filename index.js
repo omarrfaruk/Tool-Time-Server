@@ -74,7 +74,7 @@ async function run() {
         app.delete('/product/:id', async (req, res) => {
             const id = req.params.id;
             console.log(id);
-            const query = {_id:ObjectId(id) }
+            const query = { _id: ObjectId(id) }
             const result = await productsCollection.deleteOne(query)
             res.send(result)
         })
@@ -83,7 +83,7 @@ async function run() {
         app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
             // console.log(id);
-            const query = {_id: ObjectId(id) }
+            const query = { _id: ObjectId(id) }
             const products = await productsCollection.findOne(query)
             res.send(products)
         })
@@ -152,8 +152,9 @@ async function run() {
         })
 
 
-        app.get('/orders/admin', async (req, res) => {
-            const allOrders = await orderCollection.find().toArray()
+        app.get('/order', async (req, res) => {
+            const query = {}
+            const allOrders = await orderCollection.find(query).toArray()
             res.send(allOrders)
         })
 
@@ -170,7 +171,7 @@ async function run() {
             res.send(result)
         })
 
-    //user collections
+        //user collections
 
         app.put('/users/:email', async (req, res) => {
             const email = req.params.email;
@@ -185,7 +186,7 @@ async function run() {
             res.send({ result, token });
         })
 
- app.put('/user/:email', async (req, res) => {
+        app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body;
             const filter = { email: email };
