@@ -170,8 +170,7 @@ async function run() {
             res.send(result)
         })
 
-
-        //user collections
+    //user collections
 
         app.put('/users/:email', async (req, res) => {
             const email = req.params.email;
@@ -186,9 +185,7 @@ async function run() {
             res.send({ result, token });
         })
 
-
-
-        app.put('/user/:email', async (req, res) => {
+ app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body;
             const filter = { email: email };
