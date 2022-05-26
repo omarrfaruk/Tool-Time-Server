@@ -33,7 +33,7 @@ function verifyJWT(req, res, next) {
             return res.status(403).send({ message: 'Forbidden Token' })
         }
         req.decoded = decoded;
-        // console.log(decoded.foo) // bar
+        console.log(decoded.foo) // bar
         next()
     });
 }
